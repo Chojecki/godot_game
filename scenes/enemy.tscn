@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bimnaj3d7vye"]
+[gd_scene load_steps=17 format=3 uid="uid://bimnaj3d7vye"]
 
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="1_3t46l"]
 [ext_resource type="Texture2D" uid="uid://bl2dyayknjcx4" path="res://assets/sprites/slime_green.png" id="1_5yter"]
@@ -21,6 +21,18 @@ region = Rect2(48, 24, 24, 24)
 atlas = ExtResource("1_5yter")
 region = Rect2(72, 24, 24, 24)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_vur11"]
+atlas = ExtResource("1_5yter")
+region = Rect2(24, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fw657"]
+atlas = ExtResource("1_5yter")
+region = Rect2(48, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n5u28"]
+atlas = ExtResource("1_5yter")
+region = Rect2(72, 48, 24, 24)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_flmyd"]
 animations = [{
 "frames": [{
@@ -38,6 +50,20 @@ animations = [{
 }],
 "loop": true,
 "name": &"default",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vur11")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fw657")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n5u28")
+}],
+"loop": false,
+"name": &"hit",
 "speed": 10.0
 }]
 
@@ -59,9 +85,10 @@ script = ExtResource("1_3t46l")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_flmyd")
+animation = &"hit"
 autoplay = "default"
 frame = 2
-frame_progress = 0.989876
+frame_progress = 0.668122
 
 [node name="Killzone" parent="." instance=ExtResource("2_lkx32")]
 collision_mask = 2
@@ -102,5 +129,10 @@ position = Vector2(0, 3)
 shape = SubResource("CapsuleShape2D_fycdc")
 debug_color = Color(0.848094, 0.302611, 0.5729, 0.42)
 
+[node name="Timer2" type="Timer" parent="."]
+wait_time = 0.4
+one_shot = true
+
 [connection signal="body_entered" from="EnemyKillZone" to="." method="_on_enemy_kill_zone_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="Timer2" to="." method="_on_timer_2_timeout"]

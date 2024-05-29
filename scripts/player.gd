@@ -83,9 +83,10 @@ func _physics_process(delta):
 		#get_weapon()
 			
 	if Input.is_action_just_pressed("hit"):
-		var weapon = get_node("Shovel")
-		if weapon != null and weapon.has_method("hit"):
-			weapon.hit()
+		var weapon = get_node_or_null("Shovel")
+		if weapon != null:
+			if weapon.has_method("hit"):
+				weapon.hit()
 			
 			
 	if grabbed_object:

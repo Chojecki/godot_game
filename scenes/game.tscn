@@ -1,9 +1,10 @@
-[gd_scene load_steps=19 format=3 uid="uid://cxovv33sryc6i"]
+[gd_scene load_steps=20 format=3 uid="uid://cxovv33sryc6i"]
 
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="1_8nip7"]
 [ext_resource type="PackedScene" uid="uid://ciohv4iqn2wlf" path="res://scenes/player.tscn" id="1_ayk8o"]
 [ext_resource type="Texture2D" uid="uid://byiaf11upcvc6" path="res://assets/sprites/world_tileset.png" id="2_jcqds"]
 [ext_resource type="PackedScene" uid="uid://g41dr1qkoxyg" path="res://scenes/platform.tscn" id="3_6raw7"]
+[ext_resource type="FontFile" uid="uid://c7eq1m7jn1lbq" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="3_yy3ck"]
 [ext_resource type="PackedScene" uid="uid://cgpa8nmpstpft" path="res://scenes/coin.tscn" id="4_0rbt4"]
 [ext_resource type="PackedScene" uid="uid://c7vdooxym57hl" path="res://scenes/killzone.tscn" id="5_xuofd"]
 [ext_resource type="PackedScene" uid="uid://bimnaj3d7vye" path="res://scenes/enemy.tscn" id="6_0olry"]
@@ -492,6 +493,52 @@ theme_override_fonts/font = ExtResource("7_a12vj")
 theme_override_font_sizes/font_size = 8
 text = "Elo rap - zero hajsu"
 
+[node name="Popup" type="Popup" parent="GameManager"]
+size = Vector2i(300, 200)
+visible = true
+
+[node name="MarginContainer" type="MarginContainer" parent="GameManager/Popup"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameManager/Popup/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 19
+
+[node name="Label" type="Label" parent="GameManager/Popup/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/line_spacing = 20
+theme_override_fonts/font = ExtResource("7_a12vj")
+theme_override_font_sizes/font_size = 16
+text = "Twoj czas:"
+
+[node name="Label2" type="Label" parent="GameManager/Popup/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_yy3ck")
+text = "0"
+
+[node name="LineEdit" type="LineEdit" parent="GameManager/Popup/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("7_a12vj")
+placeholder_text = "Imię"
+
+[node name="Button" type="Button" parent="GameManager/Popup/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_yy3ck")
+text = "OK"
+
+[node name="HTTPRequest" type="HTTPRequest" parent="GameManager"]
+
+[node name="Timer" type="Timer" parent="GameManager"]
+
 [node name="TileMap" type="TileMap" parent="."]
 position = Vector2(103, 89)
 tile_set = SubResource("TileSet_1bf73")
@@ -548,7 +595,7 @@ position = Vector2(173, 125)
 [node name="Coin2" parent="Coins" instance=ExtResource("4_0rbt4")]
 position = Vector2(154, 50)
 
-[node name="Enemy" parent="." instance=ExtResource("6_0olry")]
+[node name="Enemy" parent="." groups=["enemies"] instance=ExtResource("6_0olry")]
 position = Vector2(277, 126)
 
 [node name="Labels" type="Node" parent="."]
@@ -633,3 +680,6 @@ shape = SubResource("RectangleShape2D_mr8ol")
 
 [node name="ShovelCollector" parent="." instance=ExtResource("10_qv74k")]
 position = Vector2(270, -32)
+
+[connection signal="pressed" from="GameManager/Popup/MarginContainer/VBoxContainer/Button" to="GameManager" method="_on_button_pressed"]
+[connection signal="timeout" from="GameManager/Timer" to="GameManager" method="_on_timer_timeout"]
