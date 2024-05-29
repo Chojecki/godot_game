@@ -1,0 +1,79 @@
+[gd_scene load_steps=7 format=3 uid="uid://c5b0idic6vax1"]
+
+[ext_resource type="Texture2D" uid="uid://bjwmfji631w1m" path="res://assets/sprites/shovel.png" id="1_myjsn"]
+[ext_resource type="Script" path="res://scenes/shovel_collector.gd" id="2_wum5d"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2r45r"]
+radius = 184.211
+
+[sub_resource type="Animation" id="Animation_avboa"]
+resource_name = "rotation"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 0,
+"values": []
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [3.48787e-16, 6.28319]
+}
+
+[sub_resource type="Animation" id="Animation_ws5e0"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [3.48787e-16]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_l1tf4"]
+_data = {
+"RESET": SubResource("Animation_ws5e0"),
+"rotation": SubResource("Animation_avboa")
+}
+
+[node name="ShovelCollector" type="Sprite2D"]
+position = Vector2(-8, 0)
+scale = Vector2(0.0976249, 0.0976249)
+texture = ExtResource("1_myjsn")
+script = ExtResource("2_wum5d")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_2r45r")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.33
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_l1tf4")
+}
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

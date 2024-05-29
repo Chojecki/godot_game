@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://bimnaj3d7vye"]
+[gd_scene load_steps=14 format=3 uid="uid://bimnaj3d7vye"]
 
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="1_3t46l"]
 [ext_resource type="Texture2D" uid="uid://bl2dyayknjcx4" path="res://assets/sprites/slime_green.png" id="1_5yter"]
 [ext_resource type="PackedScene" uid="uid://c7vdooxym57hl" path="res://scenes/killzone.tscn" id="2_lkx32"]
+[ext_resource type="Script" path="res://scripts/my_hurt_box.gd" id="4_1ogej"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3l0ck"]
 atlas = ExtResource("1_5yter")
@@ -41,10 +42,17 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xv1ei"]
-size = Vector2(14, 15)
+size = Vector2(14, 14)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_b14m4"]
 radius = 4.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lvt2s"]
+size = Vector2(10, 3)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fycdc"]
+radius = 8.0
+height = 18.0
 
 [node name="Enemy" type="CharacterBody2D"]
 script = ExtResource("1_3t46l")
@@ -59,7 +67,7 @@ frame_progress = 0.989876
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone"]
-position = Vector2(0, 4.5)
+position = Vector2(0, 5)
 shape = SubResource("RectangleShape2D_xv1ei")
 
 [node name="RayCastRight" type="RayCast2D" parent="."]
@@ -72,6 +80,27 @@ position = Vector2(0, 4)
 target_position = Vector2(-11, 0)
 collide_with_areas = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2DEnemy" type="CollisionShape2D" parent="."]
 position = Vector2(0, 7)
 shape = SubResource("CircleShape2D_b14m4")
+
+[node name="EnemyKillZone" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyKillZone"]
+position = Vector2(0, -3.5)
+shape = SubResource("RectangleShape2D_lvt2s")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.596
+one_shot = true
+
+[node name="MyHurtBox" type="Area2D" parent="."]
+script = ExtResource("4_1ogej")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MyHurtBox"]
+position = Vector2(0, 3)
+shape = SubResource("CapsuleShape2D_fycdc")
+debug_color = Color(0.848094, 0.302611, 0.5729, 0.42)
+
+[connection signal="body_entered" from="EnemyKillZone" to="." method="_on_enemy_kill_zone_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

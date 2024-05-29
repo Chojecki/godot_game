@@ -1,23 +1,30 @@
 extends CharacterBody2D
 
 @export var force = 1000
+@export var weapon_scene_path := "res://scenes/shovel.tscn"
 
 const SPEED = 130.0
 const JUMP_VELOCITY = -300.0
 
+var weapon_scene: Resource
+
 var grabbed_object:RigidBody2D = null
 var is_grabbing = false
+var facing_right := true
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 @onready var animated_sprite = $AnimatedSprite2D
-@onready var grab_area = $Area2D
+@onready var grab_area = $GrabArea
 
 func _ready():
 	# Connect the body_entered signal of the grab_area to a method
 	grab_area.connect("body_entered", Callable(self, "_on_body_entered"))
 	grab_area.connect("body_exited", Callable(self, "_on_body_exited"))
+	
+	weapon_scene = load(weapon_scene_path)
+
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -39,11 +46,16 @@ func _physics_process(delta):
 	else:
 		animated_sprite.play("jump")
 	
-	if direction > 0:
-		animated_sprite.flip_h = false
+	if direction > 0 and not facing_right:
+		scale.x *= -1
+		facing_right = !facing_right
+		# Play the camera flip animation
+		#animated_sprite.flip_h = false
 		
-	elif direction < 0:
-		animated_sprite.flip_h = true
+	elif direction < 0 and facing_right:
+		scale.x *= -1
+		facing_right = !facing_right
+		#animated_sprite.flip_h = true
 	
 	#Movement
 	if direction:
@@ -67,6 +79,14 @@ func _physics_process(delta):
 		else:
 			try_grab_object()
 			
+	#if Input.is_action_just_pressed("get_weapon"):
+		#get_weapon()
+			
+	if Input.is_action_just_pressed("hit"):
+		var weapon = get_node("Shovel")
+		if weapon != null and weapon.has_method("hit"):
+			weapon.hit()
+			
 			
 	if grabbed_object:
 		move_grabbed_object()
@@ -86,8 +106,8 @@ func release_object(delta) -> void:
 	if grabbed_object:
 		grabbed_object.freeze = false
 		handleLayerDuringDragging()
-		
-		if not animated_sprite.flip_h:
+		print(str(scale.x))
+		if facing_right:
 			grabbed_object.move_body(Vector2(grab_position.x + 15.0, grab_position.y -5.0))
 		else:
 			grabbed_object.move_body(Vector2(grab_position.x + -15.0, grab_position.y -5.0))
@@ -112,10 +132,16 @@ func handleLayerDuringDragging():
 		grabbed_object.set_collision_layer_value(1, false)
 		grabbed_object.set_collision_layer_value(4, true)
 
-
-
-
-
+func get_weapon() -> void:
+	var weapon_node = get_node("Shovel")
+	if weapon_node != null:
+		return
+	elif weapon_scene:
+		var weapon_instnace = weapon_scene.instantiate()
+		weapon_instnace.name = "Shovel"
+		add_child(weapon_instnace)
+	else:
+		print("Failed to load the weapon scene from path: %s" % weapon_scene_path)
 
 
 		
