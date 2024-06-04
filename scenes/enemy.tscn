@@ -74,7 +74,7 @@ size = Vector2(14, 14)
 radius = 4.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lvt2s"]
-size = Vector2(10, 3)
+size = Vector2(2, 3)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fycdc"]
 radius = 8.0
@@ -114,7 +114,7 @@ shape = SubResource("CircleShape2D_b14m4")
 [node name="EnemyKillZone" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyKillZone"]
-position = Vector2(0, -3.5)
+position = Vector2(0, -4)
 shape = SubResource("RectangleShape2D_lvt2s")
 
 [node name="Timer" type="Timer" parent="."]

@@ -1,6 +1,18 @@
-[gd_scene load_steps=2 format=3 uid="uid://b3dejwnicq26n"]
+[gd_scene load_steps=4 format=3 uid="uid://b3dejwnicq26n"]
 
 [ext_resource type="Script" path="res://scripts/mobable_element.gd" id="1_ubo64"]
+[ext_resource type="Texture2D" uid="uid://byiaf11upcvc6" path="res://assets/sprites/world_tileset.png" id="2_t8wre"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vtkq1"]
+size = Vector2(14, 14)
 
 [node name="mobable_element" type="RigidBody2D"]
 script = ExtResource("1_ubo64")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_t8wre")
+region_enabled = true
+region_rect = Rect2(95.6713, 16.2172, 16.2157, 16.3508)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_vtkq1")

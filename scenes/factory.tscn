@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://dw7exixv2oomq"]
+
+[ext_resource type="Script" path="res://scenes/factory.gd" id="1_08kho"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_crof5"]
+size = Vector2(52, 34)
+
+[node name="Factory" type="Area2D"]
+collision_mask = 2
+script = ExtResource("1_08kho")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_crof5")
+debug_color = Color(0.620354, 0.509046, 2.32411e-07, 0.42)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

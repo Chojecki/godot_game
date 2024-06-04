@@ -70,7 +70,11 @@ func _physics_process(delta):
 		for i in get_slide_collision_count():
 			var col = get_slide_collision(i)
 			if col.get_collider() is RigidBody2D:
+				if position.distance_to(col.get_position()) <= 10:
+					print("elooo")
+					col.get_collider().apply_force(col.get_normal() * -force)
 				col.get_collider().apply_force(col.get_normal() * -force)
+			
 				
 	# handle grabbing
 	if Input.is_action_just_pressed("grab"):
@@ -94,11 +98,30 @@ func _physics_process(delta):
 	
 func try_grab_object() -> void:
 	for body in grab_area.get_overlapping_bodies():
-		if body is RigidBody2D:
+		if body is RigidBody2D and body.is_in_group("grabbable"):
 			grabbed_object = body as RigidBody2D
 			handleLayerDuringDragging()
 			is_grabbing = true
 			grabbed_object.freeze = true
+			break
+		if body is RigidBody2D and body.is_in_group("kickable"):
+			grab_position = global_position + Vector2(velocity.x * get_physics_process_delta_time(), -10)
+			grabbed_object = body as RigidBody2D
+			
+			is_grabbing = true
+			grabbed_object.freeze = true
+			
+			if facing_right:
+				grabbed_object.move_body(Vector2(grab_position.x + 15.0, grab_position.y -5.0))
+			else:
+				grabbed_object.move_body(Vector2(grab_position.x + -15.0, grab_position.y -5.0))
+			
+			grabbed_object.freeze = false
+			grabbed_object.apply_force(velocity * (force / 20))
+			
+			grabbed_object = null
+			is_grabbing = false
+				
 			break
 			
 var grab_position: Vector2
@@ -107,7 +130,7 @@ func release_object(delta) -> void:
 	if grabbed_object:
 		grabbed_object.freeze = false
 		handleLayerDuringDragging()
-		print(str(scale.x))
+		
 		if facing_right:
 			grabbed_object.move_body(Vector2(grab_position.x + 15.0, grab_position.y -5.0))
 		else:
@@ -134,10 +157,9 @@ func handleLayerDuringDragging():
 		grabbed_object.set_collision_layer_value(4, true)
 
 func get_weapon() -> void:
-	var weapon_node = get_node("Shovel")
-	if weapon_node != null:
-		return
-	elif weapon_scene:
+	
+	
+	if weapon_scene != null:
 		var weapon_instnace = weapon_scene.instantiate()
 		weapon_instnace.name = "Shovel"
 		add_child(weapon_instnace)

@@ -2,7 +2,8 @@ extends RigidBody2D
 
 @export var destructable: bool = true
 
-var sprite: Sprite2D
+@onready var sprite = $Sprite2D
+
 
 var health = 2
 
@@ -16,7 +17,7 @@ var reset_state = false
 var moveVector: Vector2
 
 func _ready():
-	sprite = get_node("Sprite2D")
+	add_to_group("grabbable")
 
 func _integrate_forces(state):
 	if reset_state:

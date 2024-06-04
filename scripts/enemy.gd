@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-signal enemy_died
+signal enemy_died(way)
 
 const SPEED = 60
 
@@ -46,22 +46,22 @@ func _physics_process(delta):
 		velocity = direction * SPEED
 	move_and_slide()
 
-func die():
+func die(way: String):
 	if collision_shape_2d_enemy:
 		collision_shape_2d_enemy.queue_free()
 		collision_shape_2d_enemy = null
 		timer.start()
-		emit_signal("enemy_died")
+		emit_signal("enemy_died", way)
 
 func _on_enemy_kill_zone_body_entered(body):
-	die()
+	die("stone")
 
 func take_damage(amount: int) -> void:
 	timer_2.start()
 	animated_sprite.play("hit")
 	
 	if amount >= health:
-		die()
+		die("hit")
 	else:
 		health -= amount
 		print(str(health))

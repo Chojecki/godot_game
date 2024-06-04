@@ -172,7 +172,7 @@ animations = [{
 radius = 6.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nwbyi"]
-size = Vector2(20.5, 9)
+size = Vector2(20.5, 10.5)
 
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
@@ -196,5 +196,5 @@ shape = SubResource("CircleShape2D_7tqyn")
 [node name="GrabArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GrabArea"]
-position = Vector2(0.25, -5)
+position = Vector2(0.25, -5.75)
 shape = SubResource("RectangleShape2D_nwbyi")

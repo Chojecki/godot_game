@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://b30dototwaoo1"]
+
+[ext_resource type="Texture2D" uid="uid://3fpg60vrsmm6" path="res://assets/sprites/Football Soccer Ball removebg.png" id="1_c3nhh"]
+[ext_resource type="Script" path="res://scripts/ball.gd" id="1_ucmxr"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_72gu3"]
+radius = 7.0
+
+[node name="RigidBody2D" type="RigidBody2D"]
+mass = 3.53
+script = ExtResource("1_ucmxr")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("1_c3nhh")
+region_enabled = true
+region_rect = Rect2(94, 83, 301, 310)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_72gu3")
