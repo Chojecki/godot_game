@@ -82,7 +82,6 @@ func _on_timer_timeout():
 	timing += 1
 	
 func produce(position):
-	print("prod")
 	var stone_instance = stone.instantiate()
 	stone_instance.position = position
 	add_child(stone_instance)

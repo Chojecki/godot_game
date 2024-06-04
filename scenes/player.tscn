@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://ciohv4iqn2wlf"]
+[gd_scene load_steps=28 format=3 uid="uid://ciohv4iqn2wlf"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_y4j8p"]
 [ext_resource type="Texture2D" uid="uid://br1s21yvx1mwr" path="res://assets/sprites/Ludzik (1).png" id="2_ncqg8"]
@@ -168,11 +168,16 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_7tqyn"]
-radius = 6.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_il8mp"]
+radius = 5.0
+height = 18.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nwbyi"]
 size = Vector2(20.5, 10.5)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ly373"]
+radius = 1.0
+height = 4.0
 
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
@@ -190,11 +195,22 @@ frame_progress = 0.280345
 light_mask = 0
 visibility_layer = 0
 z_index = 5
-position = Vector2(0, -6)
-shape = SubResource("CircleShape2D_7tqyn")
+position = Vector2(0, -9)
+shape = SubResource("CapsuleShape2D_il8mp")
+debug_color = Color(0.835969, 1.60662e-07, 0.496239, 0.42)
 
 [node name="GrabArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GrabArea"]
 position = Vector2(0.25, -5.75)
 shape = SubResource("RectangleShape2D_nwbyi")
+
+[node name="HeadArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HeadArea"]
+position = Vector2(0, -9)
+shape = SubResource("CapsuleShape2D_ly373")
+debug_color = Color(0.292741, 0.629454, 0, 0.42)
+
+[connection signal="body_entered" from="HeadArea" to="." method="_on_head_area_body_entered"]
+[connection signal="body_exited" from="HeadArea" to="." method="_on_head_area_body_exited"]

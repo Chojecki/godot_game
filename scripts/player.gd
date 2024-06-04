@@ -33,7 +33,11 @@ func _physics_process(delta):
 
 	# Handle jump.
 	if Input.is_action_just_pressed("jump") and is_on_floor():
+		print("jump")
 		velocity.y = JUMP_VELOCITY
+	
+	if position.y > get_viewport().size.y:
+		position.y = get_viewport().size.y - 5000  # Adjust as necessary
 		
 	
 	var direction = Input.get_axis("move_left", "move_right")
@@ -70,9 +74,9 @@ func _physics_process(delta):
 		for i in get_slide_collision_count():
 			var col = get_slide_collision(i)
 			if col.get_collider() is RigidBody2D:
-				if position.distance_to(col.get_position()) <= 10:
-					print("elooo")
-					col.get_collider().apply_force(col.get_normal() * -force)
+				if position.distance_to(col.get_position()) <= 20 and col.get_collider().is_in_group("grabbable"):
+					pass
+						
 				col.get_collider().apply_force(col.get_normal() * -force)
 			
 				
@@ -167,8 +171,8 @@ func get_weapon() -> void:
 		print("Failed to load the weapon scene from path: %s" % weapon_scene_path)
 
 
-		
-		
-		
-		
-		
+func _on_head_area_body_entered(body):
+	if body.name == "TileMap":
+		position += Vector2(-10,-10)
+
+
